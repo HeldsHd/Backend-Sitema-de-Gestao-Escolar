@@ -6,5 +6,5 @@ const server = http.createServer(app);
 
 // Define a porta do servidor
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => console.info("Servidor escutando na porta ", PORT));
+server.listen(PORT, () => console.info("Servidor escutando na porta", PORT));
 
