@@ -66,20 +66,14 @@ export default {
     update: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const { matricula, cpf, nome, nascimento, email, telefone, endereco } = request.body;
+            const { cargahoraria,  } = request.body;
 
             const aluno = await prisma.aluno.update({
                 where: {
                     id: +id,
                 },
                 data: {
-                    matricula,
-                    cpf,
-                    nome,
-                    nascimento: nascimento ? new Date(nascimento) : null,
-                    email,
-                    telefone,
-                    endereco,
+
                 }
             })
 
@@ -87,5 +81,22 @@ export default {
         } catch (e) {
             return handleErros(e, response);
         }
+    },
+
+    delete: async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+
+            const aluno = await prisma.aluno.delete({
+                where: {
+                    id: +id,
+                }
+            })
+
+            return response.status(200).json(aluno)
+        }catch(e){
+                return handleErros(e, response);
+        }
     }
-};
+}
+
