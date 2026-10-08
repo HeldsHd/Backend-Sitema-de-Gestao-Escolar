@@ -3,7 +3,7 @@ import { Prisma } from "../../generated/prisma/client";
 import prismaErrorCodes from "./prismaErrorCodes.json";
 
 
-export function handleErros(e: any, response: Response) {
+export function handleErrors(e: any, response: Response) {
     console.error(e);
 
     if (e  instanceof Prisma.PrismaClientKnownRequestError) {
