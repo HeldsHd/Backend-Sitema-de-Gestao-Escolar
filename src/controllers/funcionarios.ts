@@ -36,4 +36,122 @@ export default {
       return handleErrors(e, response);
     }
   },
+
+
+  list: async (request: Request, response: Response) => {
+    try {
+      const alunos = await prisma.funcionario.findMany({
+
+      });
+
+      return response.status(200).json(alunos);
+    } catch (e) {
+      return handleErrors(e, response);
+    }
+  },
+
+  getById: async (request: Request, response: Response) => {
+    try {
+      const { id } = request.params;
+      const funcionario = await prisma.funcionario.findUnique({
+        where: {
+          id: +id,
+        },
+      });
+
+      return response.status(200).json(funcionario);
+    } catch (e) {
+      return handleErrors(e, response);
+    }
+  },
+
+  create: async (request: Request, response: Response) => {
+    try {
+      const {
+        nome,
+        email,
+        cargo,
+        nascimento,
+        cpf,
+        senha,
+        telefone,
+        endereco,
+      } = request.body;
+
+      if (!nome || !email || !cargo || !cpf || !senha) {
+        return response.status(400).json("Dados do funcionário incompletos.");
+      }
+
+      const funcionario = await prisma.funcionario.create({
+        data: {
+          nome,
+          email,
+          cargo,
+          nascimento: nascimento ? new Date(nascimento) : undefined,
+          cpf,
+          senha: bcrypt.hashSync(senha, +process.env.BCRYPT_ROUNDS!),
+          telefone,
+          endereco,
+        },
+      });
+
+      return response.status(201).json(funcionario);
+    } catch (e) {
+      return handleErrors(e, response);
+    }
+  },
+
+  update: async (request: Request, response: Response) => {
+    try {
+      const { id } = request.params;
+      const {
+        nome,
+        email,
+        cargo,
+        nascimento,
+        cpf,
+        senha,
+        telefone,
+        endereco,
+      } = request.body;
+
+      const funcionario = await prisma.funcionario.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          nome,
+          email,
+          cargo,
+          nascimento: nascimento ? new Date(nascimento) : undefined,
+          cpf,
+          senha: senha
+            ? bcrypt.hashSync(senha, +process.env.BCRYPT_ROUNDS!): undefined,
+          telefone,
+          endereco,
+        },
+      });
+
+      return response.status(200).json(funcionario);
+    } catch (e) {
+      return handleErrors(e, response);
+    }
+  },
+
+  delete: async (request: Request, response: Response) => {
+    try {
+      const { id } = request.params;
+
+      const funcionario = await prisma.funcionario.delete({
+        where: {
+          id: +id,
+        },
+      });
+
+      return response.status(200).json(funcionario);
+    } catch (e) {
+      return handleErrors(e, response);
+    }
+  },
+
 };

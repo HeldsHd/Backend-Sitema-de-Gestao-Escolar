@@ -4,6 +4,7 @@ import cursoController from "./controllers/cursos";
 import matriculaController from "./controllers/matriculas";
 import funcionariosController from "./controllers/funcionarios";
 import { authentication } from "./middlewares/authentication";
+import { isAdmin, isAdminOrHimself } from "./middlewares/permissions";
 
 // Inicializa o router
 const routes = Router();
@@ -26,6 +27,14 @@ routes.get("/cursos/:id", authentication, cursoController.getById);
 routes.post("/cursos", authentication, cursoController.create);
 routes.put("/cursos/:id", authentication, cursoController.update);
 routes.delete("/cursos/:id", authentication, cursoController.delete);
+
+// CRUD funcionarios
+
+routes.get("/funcionarios", authentication, isAdmin, funcionariosController.list);
+routes.get("/funcionarios/:id", authentication, isAdminOrHimself, funcionariosController.getById);
+routes.post("/funcionarios", authentication, isAdmin, funcionariosController.create);
+routes.put("/funcionarios/:id", authentication, isAdminOrHimself, funcionariosController.update);
+routes.delete("/funcionarios/:id", authentication, isAdmin, funcionariosController.delete);
 
 // Rotas de matrículas
 routes.post("/matriculas/:id", authentication, matriculaController.create);
