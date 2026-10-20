@@ -39,7 +39,11 @@ export default {
 
   list: async (request: Request, response: Response) => {
     try {
-      const funcionarios = await prisma.funcionario.findMany({});
+      const funcionarios = await prisma.funcionario.findMany({
+        omit: {
+          senha: true,
+        }
+      });
 
       return response.status(200).json(funcionarios);
     } catch (e) {
@@ -54,6 +58,9 @@ export default {
         where: {
           id: +id,
         },
+        omit: {
+          senha: true,
+        }
       });
 
       return response.status(200).json(funcionario);
@@ -82,6 +89,9 @@ export default {
           telefone,
           endereco,
         },
+        omit: {
+          senha: true,
+        }
       });
 
       return response.status(201).json(funcionario);
@@ -112,6 +122,9 @@ export default {
           telefone,
           endereco,
         },
+        omit: {
+          senha: true,
+        }
       });
 
       return response.status(200).json(funcionario);
@@ -128,7 +141,11 @@ export default {
         where: {
           id: +id,
         },
+        omit: {
+          senha: true,
+        }
       });
+      
 
       return response.status(200).json(funcionario);
     } catch (e) {
