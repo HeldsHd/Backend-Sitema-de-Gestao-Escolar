@@ -24,27 +24,24 @@ export default {
       }
 
       const token = jwt.sign(
-        { id: funcionario.id, cargo: funcionario.cargo,  },
-         process.env.JWT_SECRET!,
-         {
-          expiresIn: "1d"
-         },
+        { id: funcionario.id, cargo: funcionario.cargo },
+        process.env.JWT_SECRET!,
+        {
+          expiresIn: "1d",
+        },
       );
 
-      return response.status(200).json(token)
+      return response.status(200).json(token);
     } catch (e) {
       return handleErrors(e, response);
     }
   },
 
-
   list: async (request: Request, response: Response) => {
     try {
-      const alunos = await prisma.funcionario.findMany({
+      const funcionarios = await prisma.funcionario.findMany({});
 
-      });
-
-      return response.status(200).json(alunos);
+      return response.status(200).json(funcionarios);
     } catch (e) {
       return handleErrors(e, response);
     }
@@ -67,16 +64,8 @@ export default {
 
   create: async (request: Request, response: Response) => {
     try {
-      const {
-        nome,
-        email,
-        cargo,
-        nascimento,
-        cpf,
-        senha,
-        telefone,
-        endereco,
-      } = request.body;
+      const { nome, email, cargo, nascimento, cpf, senha, telefone, endereco } =
+        request.body;
 
       if (!nome || !email || !cargo || !cpf || !senha) {
         return response.status(400).json("Dados do funcionário incompletos.");
@@ -104,16 +93,8 @@ export default {
   update: async (request: Request, response: Response) => {
     try {
       const { id } = request.params;
-      const {
-        nome,
-        email,
-        cargo,
-        nascimento,
-        cpf,
-        senha,
-        telefone,
-        endereco,
-      } = request.body;
+      const { nome, email, cargo, nascimento, cpf, senha, telefone, endereco } =
+        request.body;
 
       const funcionario = await prisma.funcionario.update({
         where: {
@@ -126,7 +107,8 @@ export default {
           nascimento: nascimento ? new Date(nascimento) : undefined,
           cpf,
           senha: senha
-            ? bcrypt.hashSync(senha, +process.env.BCRYPT_ROUNDS!): undefined,
+            ? bcrypt.hashSync(senha, +process.env.BCRYPT_ROUNDS!)
+            : undefined,
           telefone,
           endereco,
         },
@@ -153,5 +135,4 @@ export default {
       return handleErrors(e, response);
     }
   },
-
 };
